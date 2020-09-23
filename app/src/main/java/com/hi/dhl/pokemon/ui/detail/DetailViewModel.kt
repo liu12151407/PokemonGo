@@ -19,6 +19,8 @@ package com.hi.dhl.pokemon.ui.detail
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.hi.dhl.pokemon.data.remote.doFailure
+import com.hi.dhl.pokemon.data.remote.doSuccess
 import com.hi.dhl.pokemon.data.repository.Repository
 import com.hi.dhl.pokemon.model.PokemonInfoModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,7 +29,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * <pre>
@@ -37,7 +38,7 @@ import timber.log.Timber
  * </pre>
  */
 class DetailViewModel @ViewModelInject constructor(
-    val polemonRepository: Repository
+    private val pokemonRepository: Repository
 ) : ViewModel() {
     val mLoading = ObservableBoolean()
 
@@ -47,12 +48,15 @@ class DetailViewModel @ViewModelInject constructor(
     // 对外暴露不可变的 LiveData，只能查询
     val pokemon: LiveData<PokemonInfoModel> = _pokemon
 
+    private val _failure = MutableLiveData<String>()
+    val failure = _failure
+
     /**
      * 方法二
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun fectchPokemonInfo2(name: String) = liveData<PokemonInfoModel> {
-        polemonRepository.featchPokemonInfo(name)
+        pokemonRepository.fetchPokemonInfo(name)
             .onStart {
                 // 在调用 flow 请求数据之前，做一些准备工作，例如显示正在加载数据的按钮
                 mLoading.set(true)
@@ -65,9 +69,14 @@ class DetailViewModel @ViewModelInject constructor(
                 // 请求完成
                 mLoading.set(false)
             }
-            .collectLatest {
-                _pokemon.postValue(it)
-                emit(it)
+            .collectLatest { result ->
+                result.doFailure { throwable ->
+                    _failure.value = throwable?.message ?: "failure"
+                }
+                result.doSuccess { value ->
+                    _pokemon.postValue(value)
+                    emit(value)
+                }
             }
     }
 
@@ -75,8 +84,8 @@ class DetailViewModel @ViewModelInject constructor(
      * 方法三
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun fectchPokemonInfo3(name: String) =
-        polemonRepository.featchPokemonInfo(name)
+    suspend fun fetchPokemonInfo3(name: String) =
+        pokemonRepository.fetchPokemonInfo(name)
             .onStart {
                 // 在调用 flow 请求数据之前，做一些准备工作，例如显示正在加载数据的按钮
                 mLoading.set(true)
@@ -94,8 +103,8 @@ class DetailViewModel @ViewModelInject constructor(
      * 方法一
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun fectchPokemonInfo1(name: String) = viewModelScope.launch {
-        polemonRepository.featchPokemonInfo(name)
+    fun fetchPokemonInfo1(name: String) = viewModelScope.launch {
+        pokemonRepository.fetchPokemonInfo(name)
             .onStart {
                 // 在调用 flow 请求数据之前，做一些准备工作，例如显示正在加载数据的按钮
                 mLoading.set(true)
@@ -108,11 +117,16 @@ class DetailViewModel @ViewModelInject constructor(
                 // 请求完成
                 mLoading.set(false)
             }
-            .collectLatest {
-                _pokemon.postValue(it)
+            .collectLatest { result ->
+                result.doFailure { throwable ->
+                    _failure.value = throwable?.message ?: "failure"
+                }
+
+                result.doSuccess { value ->
+                    _pokemon.postValue(value)
+                }
             }
     }
-
 
     companion object {
         private val TAG = "DetailViewModel"

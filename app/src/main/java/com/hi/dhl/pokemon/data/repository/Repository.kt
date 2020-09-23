@@ -17,6 +17,7 @@
 package com.hi.dhl.pokemon.data.repository
 
 import androidx.paging.PagingData
+import com.hi.dhl.pokemon.data.remote.PokemonResult
 import com.hi.dhl.pokemon.model.PokemonInfoModel
 import com.hi.dhl.pokemon.model.PokemonItemModel
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +30,7 @@ import kotlinx.coroutines.flow.Flow
  * </pre>
  */
 interface Repository {
-    fun featchPokemonList(): Flow<PagingData<PokemonItemModel>>
+    fun fetchPokemonList(): Flow<PagingData<PokemonItemModel>>
 
-    suspend fun featchPokemonInfo(name: String): Flow<PokemonInfoModel>
+    suspend fun fetchPokemonInfo(name: String): Flow<PokemonResult<PokemonInfoModel>>
 }

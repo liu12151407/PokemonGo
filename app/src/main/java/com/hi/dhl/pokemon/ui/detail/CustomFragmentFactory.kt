@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package com.hi.dhl.pokemon.ui.main
+package com.hi.dhl.pokemon.ui.detail
 
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.hi.dhl.pokemon.data.repository.Repository
-import com.hi.dhl.pokemon.model.PokemonItemModel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
 
 /**
  * <pre>
  *     author: dhl
- *     date  : 2020/7/11
+ *     date  : 2020/7/22
  *     desc  :
  * </pre>
  */
+class CustomFragmentFactory() : FragmentFactory() {
 
-class MainViewModel @ViewModelInject constructor(
-    private val pokemonRepository: Repository
-) : ViewModel() {
-
-    fun postOfData(): LiveData<PagingData<PokemonItemModel>> =
-        pokemonRepository.fetchPokemonList().cachedIn(viewModelScope).asLiveData()
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment =
+        when (className) {
+            DetailsFragment::class.java.name -> DetailsFragment(DetailsFragment::class.java.simpleName)
+            else -> super.instantiate(classLoader, className)
+        }
 }

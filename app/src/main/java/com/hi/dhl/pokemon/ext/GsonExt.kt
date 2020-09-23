@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package com.hi.dhl.pokemon.ui.main
+package com.hi.dhl.pokemon.ext
 
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.hi.dhl.pokemon.data.repository.Repository
-import com.hi.dhl.pokemon.model.PokemonItemModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 /**
  * <pre>
  *     author: dhl
- *     date  : 2020/7/11
+ *     date  : 2020/7/21
  *     desc  :
  * </pre>
  */
 
-class MainViewModel @ViewModelInject constructor(
-    private val pokemonRepository: Repository
-) : ViewModel() {
+fun <T> Gson.typedToJson(src:T):String = toJson(src)
 
-    fun postOfData(): LiveData<PagingData<PokemonItemModel>> =
-        pokemonRepository.fetchPokemonList().cachedIn(viewModelScope).asLiveData()
-}
+inline fun <reified T:Any> Gson.fromJson(json:String):T = fromJson(json,object : TypeToken<T>(){}.type)
