@@ -22,17 +22,19 @@
 <a href="https://github.com/hi-dhl"><img src="https://img.shields.io/badge/GitHub-HiDhl-4BC51D.svg?style=flat"></a> <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/license-Apache2.0-blue.svg?style=flat"></a> <img src="https://img.shields.io/badge/language-kotlin-orange.svg"/> <img src="https://img.shields.io/badge/platform-android-lightgrey.svg"/>
 </p>
 
-<p align="center">
-<img src="http://cdn.51git.cn/2020-07-23-Pokemon12.png"/> 
-</p>
-
-<p align="center"> PokemonGo 动态效果图如下所示，如果动图无法查看，请点击这里查看 <a href="http://cdn.51git.cn/2020-07-14-15946978385391.gif"> 动态效果图</a> | <a href="http://cdn.51git.cn/2020-07-14-PokemonGo2.png"> 静态图</a></p>
+<p align="center"> PokemonGo 动态效果图如下所示，如果动图无法查看，请点击这里查看 <a href="http://cdn.51git.cn/2020-07-14-15946978385391.gif"> 动态效果图</a> | <a href="http://img.hi-dhl.com/Pokemon.png"> 静态图</a></p>
 
 <p align="center">
-<img src="http://cdn.51git.cn/2020-07-14-15947367840380.gif"/> 
+<img src="http://img.hi-dhl.com/Pokemon.png"/> 
 </p>
 
 ### PokemonGo 更新记录
+
+**2020-12-05:**
+
+* upgrad kotlin plugin to 1.4.2
+* delete Kotlin synthetics 
+* delete kotlin-android-extensions
 
 **2020-09-27:**
 
@@ -200,22 +202,16 @@ Jetpack 的视图模型的 MVVM 架构由 View + DataBinding + ViewModel + Model
 
 * 「为互联网人而设计，国内国外名站导航」涵括新闻、体育、生活、娱乐、设计、产品、运营、前端开发、Android 开发等等网址，欢迎前去查看 [为互联网人而设计导航网站](https://site.51git.cn)
 
-## License
+## 感谢
 
-```
-Copyright 2020 hi-dhl (Jack Deng)
+**中文：**
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+* PokemonGo 使用了 [PokeAPI](https://pokeapi.co) 
+* 感谢 [Pokedex](https://github.com/skydoves/Pokedex) 、 [Kotlin-Pokedex ](https://github.com/mrcsxsiq/Kotlin-Pokedex) 、 [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin) 和 Jetpack 等等开源项目
 
-   http://www.apache.org/licenses/LICENSE-2.0
+**English：**
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+* PokemonGo use [PokeAPI](https://pokeapi.co) data
+* Thanks to the [Pokedex](https://github.com/skydoves/Pokedex) 、 [Kotlin-Pokedex ](https://github.com/mrcsxsiq/Kotlin-Pokedex) 、 [gradle-versions-plugin](https://github.com/ben-manes/gradle-versions-plugin) and Jetpack open source project
 
 
