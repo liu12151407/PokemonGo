@@ -1,34 +1,17 @@
-/*
- * Copyright 2020. hi-dhl (Jack Deng)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.hi.dhl.pokemon.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import com.hi.dhl.jdatabinding.DataBindingAppCompatActivity
+import com.hi.dhl.jdatabinding.binding
 import com.hi.dhl.pokemon.R
 import com.hi.dhl.pokemon.databinding.ActivityMainBinding
 import com.hi.dhl.pokemon.ui.main.footer.FooterAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.motion_coordinatorlayout_header.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -36,8 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : DataBindingAppCompatActivity() {
-    private val mBinding: ActivityMainBinding by binding(R.layout.activity_main)
+class MainActivity : AppCompatActivity() {
+    private val mBinding: ActivityMainBinding by binding()
     private val mViewModel: MainViewModel by viewModels()
     private val mPokemonAdapter by lazy { PokemonAdapter() }
 
@@ -47,21 +30,26 @@ class MainActivity : DataBindingAppCompatActivity() {
             recyleView.adapter = mPokemonAdapter.withLoadStateFooter(FooterAdapter(mPokemonAdapter))
             mainViewModel = mViewModel
             lifecycleOwner = this@MainActivity
-            searchView.addTextChangedListener {
-                val result = it.toString()
-                mViewModel.queryParameterForDb(result) // 搜索数据库
+        }
+
+        /**
+         * 分为 数据库 和 网络搜索
+         * 可以运行注释掉的代码，文章链接：https://juejin.cn/post/6854573220457086990
+         */
+        mBinding.layoutHeader.searchView.addTextChangedListener {
+            val result = it.toString()
+            mViewModel.queryParameterForDb(result) // 搜索数据库
 //                mViewModel.queryParameterForNetWork(result) // 网络搜索
-            }
         }
 
         mViewModel.postOfData().observe(this, Observer {
             mPokemonAdapter.submitData(lifecycle, it)
-            swiperRefresh.isEnabled = false
+            mBinding.swiperRefresh.isEnabled = false
         })
 
         lifecycleScope.launchWhenCreated {
             mPokemonAdapter.loadStateFlow.collectLatest { state ->
-                swiperRefresh.isRefreshing = state.refresh is LoadState.Loading
+                mBinding.swiperRefresh.isRefreshing = state.refresh is LoadState.Loading
             }
         }
 
